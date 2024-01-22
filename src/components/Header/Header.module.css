@@ -1,0 +1,10 @@
+.headerContainer {
+  display: flex;
+  justify-content: center;
+  height: auto;
+  background-color: #f4cae0;
+}
+
+.headerTitle {
+  color: #64a6bd;
+}
