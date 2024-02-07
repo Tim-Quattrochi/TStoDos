@@ -1,15 +1,24 @@
+import { FC } from "react";
 import todoItemStyles from "./TodoItem.module.css";
 
-type ItemProps = {
+interface TodoItemProps {
   id: number;
   task: string;
-  complete: boolean | undefined;
-};
+  complete: boolean;
+  completeTask: (index: number) => void;
+}
 
-const TodoItem = ({ id, task, complete }: ItemProps) => {
+const TodoItem: FC<TodoItemProps> = ({ task, id, completeTask }) => {
   return (
     <li className={todoItemStyles.container}>
-      <div>{task}</div>
+      <div>
+        {task}
+        <span>
+          <button onClick={() => completeTask(id)}>
+            mark complete
+          </button>
+        </span>
+      </div>
     </li>
   );
 };
