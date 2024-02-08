@@ -1,4 +1,3 @@
-import { FC } from "react";
 import todoItemStyles from "./TodoItem.module.css";
 
 interface TodoItemProps {
@@ -8,7 +7,7 @@ interface TodoItemProps {
   completeTask: (index: number) => void;
 }
 
-const TodoItem: FC<TodoItemProps> = ({ task, id, completeTask }) => {
+const TodoItem = ({ task, id, completeTask }: TodoItemProps) => {
   return (
     <li className={todoItemStyles.container}>
       <div>
