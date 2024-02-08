@@ -21,7 +21,7 @@ const enum ActionTypes {
 type ReducerAction = {
   type: ActionTypes;
   payload?: {
-    task?: string;
+    task: string;
   };
 
   index?: number;
@@ -53,13 +53,14 @@ function todoReducer(
         state.todoItems[action.index].inEdit = true;
       }
 
-      return { ...state };
+      return { ...state, todoItems: [...state.todoItems] };
     case ActionTypes.SAVE:
-      if (action.index !== undefined) {
+      if (action.index !== undefined && action.payload) {
         state.todoItems[action.index].inEdit = false;
+        state.todoItems[action.index].task = action.payload.task;
       }
 
-      return { ...state };
+      return { ...state, todoItems: [...state.todoItems] };
     case ActionTypes.DELETE: {
       return {
         ...state,
@@ -114,6 +115,7 @@ export default function TaskList() {
     dispatch type: 'save'
   */
   const saveTask = (index: number, task: string) => {
+    console.log(task)
     dispatch({ type: ActionTypes.SAVE, index, payload: { task } });
   };
 
@@ -185,8 +187,11 @@ export default function TaskList() {
           key={i}
           task={v.task}
           id={i}
+          isEditing={v.inEdit}
           complete={v.completed}
           completeTask={completeTask}
+          editTask={editTask}
+          saveTask={saveTask}
         />
       );
     }
