@@ -38,6 +38,7 @@ export interface TodoStateType {
 const newTask: TodoItemType = {
   task: "",
   completed: false,
+  inEdit: true,
 };
 
 export function todoReducer(
@@ -80,10 +81,9 @@ export function todoReducer(
 
       return { ...state };
     case ActionTypes.ADD:
-      newTask.inEdit = true;
       return {
         ...state,
-        todoItems: [newTask, ...state.todoItems],
+        todoItems: [...state.todoItems, newTask],
       };
 
     default:
