@@ -1,8 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import TodoItem from "./components/TodoItem/TodoItem";
-import TodoItems from "./components/TodoItems/TodoItems";
 import Header from "./components/Header/Header";
-import TaskList from "./context/TodoContext";
+import TaskList from "./components/TodoItems/TaskList";
 
 function App() {
   return (
