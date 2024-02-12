@@ -6,7 +6,6 @@ export const enum ActionTypes {
   DELETE = "delete",
   COMPLETE = "complete",
   INCOMPLETE = "incomplete",
-  UPDATE = "update",
   REORDER = "reorder",
   REORDEREDCOMPLETE = "REORDEREDCOMPLETE",
   ADD = "add",
@@ -16,7 +15,7 @@ export const initialState: TodoStateType = {
   todoItems: toDoItems,
 };
 
-type TodoItemType = {
+export type TodoItemType = {
   task: string;
   completed: boolean;
   inEdit?: boolean;
@@ -35,17 +34,10 @@ export interface TodoStateType {
   todoItems: TodoItemType[];
 }
 
-const newTask: TodoItemType = {
-  task: "",
-  completed: false,
-  inEdit: true,
-};
-
 export function todoReducer(
   state: TodoStateType,
   action: ReducerAction
 ): TodoStateType {
-  console.log(state);
   switch (action.type) {
     case ActionTypes.EDIT:
       if (action.index !== undefined) {
@@ -80,11 +72,17 @@ export function todoReducer(
       }
 
       return { ...state };
-    case ActionTypes.ADD:
+    case ActionTypes.ADD: {
+      const addedTask: TodoItemType = {
+        task: "",
+        completed: false,
+        inEdit: true,
+      };
       return {
         ...state,
-        todoItems: [...state.todoItems, newTask],
+        todoItems: [...state.todoItems, addedTask],
       };
+    }
 
     default:
       throw Error("Unknown action: " + action.type);

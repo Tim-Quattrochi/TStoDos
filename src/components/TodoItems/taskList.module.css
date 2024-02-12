@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  flex-flow: column wrap;
+  height: 100vh;
+}
+
+.addBtn {
+  width: 50px;
+  margin: 5px auto;
+}

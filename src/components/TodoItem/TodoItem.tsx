@@ -1,26 +1,35 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
+import Button from "../common/Button/Button";
 import todoItemStyles from "./TodoItem.module.css";
 
 interface TodoItemProps {
   id: number;
   task: string;
-  complete: boolean;
   isEditing: boolean | undefined;
   completeTask: (index: number) => void;
   editTask: (index: number) => void;
   saveTask: (index: number, task: string) => void;
+  deleteTask: (index: number) => void;
 }
 
 const TodoItem = ({
   id,
   task,
-  complete,
   isEditing,
   completeTask,
   editTask,
   saveTask,
+  deleteTask,
 }: TodoItemProps) => {
   const [editedTask, setEditedTask] = useState<string>(task);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEditedTask(e.target.value);
+  };
+
+  const handleUpdateTask = (id: number) => {
+    saveTask(id, editedTask);
+  };
 
   return (
     <li className={todoItemStyles.container}>
@@ -28,39 +37,31 @@ const TodoItem = ({
         <input
           type="text"
           value={editedTask}
-          onChange={(e) => setEditedTask(e.target.value)}
+          onChange={handleChange}
         />
       ) : (
         <div className={todoItemStyles.task}>{task}</div>
       )}
 
-      <button
-        className={todoItemStyles.btn}
-        onClick={() => completeTask(id)}
-      >
+      <Button variant="success" onClick={() => completeTask(id)}>
         mark complete
-      </button>
+      </Button>
 
-      {isEditing && (
-        <button
-          className={todoItemStyles.btn}
-          onClick={() =>
-            saveTask(
-              id,
-              document.getElementsByTagName("input")[0].value
-            )
-          }
+      {isEditing ? (
+        <Button
+          variant="primary"
+          onClick={() => handleUpdateTask(id)}
         >
-          save
-        </button>
+          Save
+        </Button>
+      ) : (
+        <Button variant="secondary" onClick={() => editTask(id)}>
+          {"Edit"}
+        </Button>
       )}
-      <button
-        className={todoItemStyles.btn}
-        onClick={() => editTask(id)}
-        hidden={isEditing}
-      >
-        edit
-      </button>
+      <Button variant="warning" onClick={() => deleteTask(id)}>
+        {"Delete"}
+      </Button>
     </li>
   );
 };

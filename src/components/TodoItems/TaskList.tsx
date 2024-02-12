@@ -2,6 +2,8 @@ import { useState, useContext } from "react";
 import TodoItem from "../TodoItem/TodoItem";
 import * as actions from "../../services/todoActions";
 import { TodoContext } from "../../context/TodoContext";
+import taskListStyles from "./taskList.module.css";
+import Button from "../common/Button/Button";
 
 export default function TaskList() {
   const [seeCompleted, setSeeCompleted] = useState<boolean>(false);
@@ -18,8 +20,8 @@ export default function TaskList() {
     editTask,
     saveTask,
     deCompleteTask,
+    deleteTask,
   } = actions;
-  console.log("state above list: ", state);
 
   const list = state.todoItems.map((v, i) => {
     if (!v.completed) {
@@ -29,10 +31,10 @@ export default function TaskList() {
           task={v.task}
           id={i}
           isEditing={v.inEdit}
-          complete={v.completed}
           completeTask={() => completeTask(dispatch, i)}
           editTask={() => editTask(dispatch, i)}
           saveTask={(_, newTask) => saveTask(dispatch, i, newTask)}
+          deleteTask={() => deleteTask(dispatch, i)}
         />
       );
     }
@@ -43,21 +45,30 @@ export default function TaskList() {
         <div key={i}>
           <s>{v.task}</s>
           <button onClick={() => deCompleteTask(dispatch, i)}>
-            uncomplete
+            undo complete
           </button>
         </div>
       );
     }
   });
   return (
-    <>
-      <button onClick={() => setSeeCompleted(!seeCompleted)}>
+    <div className={taskListStyles.container}>
+      <Button
+        variant="info"
+        onClick={() => setSeeCompleted(!seeCompleted)}
+      >
         {seeCompleted
           ? "See Incomplete Tasks"
           : "See Completed Tasks"}
-      </button>
+      </Button>
       {seeCompleted ? completedList : list}
-      <button onClick={() => addTask(dispatch)}>Add a Task</button>
-    </>
+      <Button
+        hidden={seeCompleted}
+        variant="secondary"
+        onClick={() => addTask(dispatch)}
+      >
+        Add a Task
+      </Button>
+    </div>
   );
 }
