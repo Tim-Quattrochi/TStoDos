@@ -42,12 +42,13 @@ export default function TaskList() {
   const completedList = state.todoItems.map((v, i) => {
     if (v.completed) {
       return (
-        <div key={i}>
-          <s>{v.task}</s>
-          <button onClick={() => deCompleteTask(dispatch, i)}>
-            undo complete
-          </button>
-        </div>
+        <TodoItem
+          key={i}
+          id={i}
+          task={v.task}
+          deComplete={() => deCompleteTask(dispatch, i)}
+          deleteTask={() => deleteTask(dispatch, i)}
+        />
       );
     }
   });

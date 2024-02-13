@@ -5,11 +5,12 @@ import todoItemStyles from "./TodoItem.module.css";
 interface TodoItemProps {
   id: number;
   task: string;
-  isEditing: boolean | undefined;
-  completeTask: (index: number) => void;
-  editTask: (index: number) => void;
-  saveTask: (index: number, task: string) => void;
-  deleteTask: (index: number) => void;
+  isEditing?: boolean;
+  completeTask?: (index: number) => void;
+  deComplete?: (index: number) => void;
+  editTask?: (index: number) => void;
+  saveTask?: (index: number, task: string) => void;
+  deleteTask?: (index: number) => void;
 }
 
 const TodoItem = ({
@@ -17,18 +18,25 @@ const TodoItem = ({
   task,
   isEditing,
   completeTask,
+  deComplete,
   editTask,
   saveTask,
   deleteTask,
 }: TodoItemProps) => {
   const [editedTask, setEditedTask] = useState<string>(task);
 
+  const isForDecomplete = !!deComplete;
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEditedTask(e.target.value);
   };
 
-  const handleUpdateTask = (id: number) => {
-    saveTask(id, editedTask);
+  const handleUpdateTask = (): void => {
+    if (isForDecomplete) {
+      deComplete(id);
+    } else {
+      completeTask?.(id);
+    }
   };
 
   return (
@@ -43,23 +51,35 @@ const TodoItem = ({
         <div className={todoItemStyles.task}>{task}</div>
       )}
 
-      <Button variant="success" onClick={() => completeTask(id)}>
-        mark complete
-      </Button>
+      {deComplete ? (
+        <Button variant="success" onClick={handleUpdateTask}>
+          undo complete
+        </Button>
+      ) : (
+        <Button variant="success" onClick={handleUpdateTask}>
+          complete
+        </Button>
+      )}
 
       {isEditing ? (
         <Button
           variant="primary"
-          onClick={() => handleUpdateTask(id)}
+          onClick={() => saveTask?.(id, task)}
         >
           Save
         </Button>
       ) : (
-        <Button variant="secondary" onClick={() => editTask(id)}>
+        <Button
+          hidden={isForDecomplete}
+          variant="secondary"
+          onClick={() => editTask?.(id)}
+        >
           {"Edit"}
         </Button>
       )}
-      <Button variant="warning" onClick={() => deleteTask(id)}>
+
+      {}
+      <Button variant="warning" onClick={() => deleteTask?.(id)}>
         {"Delete"}
       </Button>
     </li>
