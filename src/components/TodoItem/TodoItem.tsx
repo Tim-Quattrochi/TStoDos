@@ -1,11 +1,12 @@
 import { ChangeEvent, useState } from "react";
 import Button from "../common/Button/Button";
-import todoItemStyles from "./TodoItem.module.css";
+import styles from "./TodoItem.module.css";
 
 interface TodoItemProps {
   id: number;
   task: string;
   isEditing?: boolean;
+  completed?: boolean;
   completeTask?: (index: number) => void;
   deComplete?: (index: number) => void;
   editTask?: (index: number) => void;
@@ -17,6 +18,7 @@ const TodoItem = ({
   id,
   task,
   isEditing,
+  completed,
   completeTask,
   deComplete,
   editTask,
@@ -40,15 +42,18 @@ const TodoItem = ({
   };
 
   return (
-    <li className={todoItemStyles.container}>
+    <li className={styles.container}>
       {isEditing ? (
         <input
+          className={styles.input}
           type="text"
           value={editedTask}
           onChange={handleChange}
         />
       ) : (
-        <div className={todoItemStyles.task}>{task}</div>
+        <div className={styles.task}>
+          {completed ? <s>{task}</s> : <p>{task}</p>}
+        </div>
       )}
 
       {deComplete ? (

@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import TodoItem from "../TodoItem/TodoItem";
 import * as actions from "../../services/todoActions";
 import { TodoContext } from "../../context/TodoContext";
-import taskListStyles from "./taskList.module.css";
+import styles from "./taskList.module.css";
 import Button from "../common/Button/Button";
 
 export default function TaskList() {
@@ -45,6 +45,7 @@ export default function TaskList() {
         <TodoItem
           key={i}
           id={i}
+          completed={v.completed}
           task={v.task}
           deComplete={() => deCompleteTask(dispatch, i)}
           deleteTask={() => deleteTask(dispatch, i)}
@@ -53,7 +54,7 @@ export default function TaskList() {
     }
   });
   return (
-    <div className={taskListStyles.container}>
+    <div className={styles.container}>
       <Button
         variant="info"
         onClick={() => setSeeCompleted(!seeCompleted)}

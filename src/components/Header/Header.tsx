@@ -1,9 +1,9 @@
-import headerStyles from "./Header.module.css";
+import styles from "./Header.module.css";
 
 const Header = () => {
   return (
-    <header className={headerStyles.headerContainer}>
-      <h1 className={headerStyles.headerTitle}>Hi There!</h1>
+    <header className={styles.container}>
+      <h1 className={styles.title}>Todo list</h1>
     </header>
   );
 };

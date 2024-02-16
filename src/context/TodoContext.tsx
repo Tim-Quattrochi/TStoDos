@@ -4,7 +4,7 @@ import {
   Dispatch,
   ReactElement,
 } from "react";
-import { toDoItems } from "../utils/todos";
+
 import {
   todoReducer,
   initialState,
@@ -23,7 +23,7 @@ type ChildrenType = {
 
 const TodoContext = createContext<TodoContextProps | null>(null);
 
-const TodoProvider = ({ children }: ChildrenType) => {
+const TodoProvider = ({ children }: ChildrenType): ReactElement => {
   const [state, dispatch] = useReducer(todoReducer, initialState);
 
   return (
