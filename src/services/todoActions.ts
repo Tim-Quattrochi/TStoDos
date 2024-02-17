@@ -12,7 +12,7 @@ export const saveTask = (
   index: number,
   task: string
 ) => {
-  dispatch({ type: ActionTypes.SAVE, index, payload: { task } });
+  dispatch({ type: ActionTypes.SAVE, index, payload: task });
 };
 
 export const completeTask = (
@@ -37,25 +37,23 @@ export const addTask = (dispatch: TodoDispatch) => {
 
     dispatch type: 'add'
   */
-//   const reOrderTask = (index, direction) => {
-//     dispatch({
-//       type: ACTIONS.ADD,
-//       index,
-//       payload:
-//         direction !== ""
-//           ? direction === "increase"
-//             ? "increase"
-//             : "decrease"
-//           : "",
-//     });
-//   };
+export const reOrderTask = (
+  dispatch: TodoDispatch,
+  index: number,
+  direction: string
+) => {
+  dispatch({
+    type: ActionTypes.REORDER,
+    index,
+    payload:
+      direction !== ""
+        ? direction === "increase"
+          ? "increase"
+          : "decrease"
+        : "",
+  });
+};
 
-/** 
-    function completeTask
-    parameter: index - index of toDo item in array
-
-    dispatch type: 'complete'
-  */
 export const deCompleteTask = (
   dispatch: TodoDispatch,
   index: number

@@ -23,9 +23,7 @@ export type TodoItemType = {
 
 export type ReducerAction = {
   type: ActionTypes;
-  payload?: {
-    task: string;
-  };
+  payload?: string;
 
   index?: number;
 };
@@ -46,9 +44,10 @@ export function todoReducer(
 
       return { ...state, todoItems: [...state.todoItems] };
     case ActionTypes.SAVE:
+      console.log(action);
       if (action.index !== undefined && action.payload) {
         state.todoItems[action.index].inEdit = false;
-        state.todoItems[action.index].task = action.payload.task;
+        state.todoItems[action.index].task = action.payload;
       }
 
       return { ...state, todoItems: [...state.todoItems] };
@@ -81,6 +80,37 @@ export function todoReducer(
       return {
         ...state,
         todoItems: [...state.todoItems, addedTask],
+      };
+    }
+    case ActionTypes.REORDER: {
+      if (action.index) {
+        const items = [...state.todoItems];
+        if (action.payload === "increase" && action.index > 0) {
+          [items[action.index], items[action.index - 1]] = [
+            items[action.index - 1],
+            items[action.index],
+          ];
+        } else if (
+          action.payload === "decrease" &&
+          action.index < state.todoItems.length - 1
+        ) {
+          [items[action.index], items[action.index + 1]] = [
+            items[action.index + 1],
+            items[action.index],
+          ];
+        } else {
+          return state;
+        }
+
+        return {
+          ...state,
+          todoItems: items,
+        };
+      }
+
+      return {
+        ...state,
+        // todoItems: [...state.todoItems, addedTask],
       };
     }
 

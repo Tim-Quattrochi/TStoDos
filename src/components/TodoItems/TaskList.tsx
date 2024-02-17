@@ -21,6 +21,7 @@ export default function TaskList() {
     saveTask,
     deCompleteTask,
     deleteTask,
+    reOrderTask,
   } = actions;
 
   const list = state.todoItems.map((v, i) => {
@@ -35,6 +36,9 @@ export default function TaskList() {
           editTask={() => editTask(dispatch, i)}
           saveTask={(_, newTask) => saveTask(dispatch, i, newTask)}
           deleteTask={() => deleteTask(dispatch, i)}
+          reOrderTask={(_, direction) =>
+            reOrderTask(dispatch, i, direction)
+          }
         />
       );
     }

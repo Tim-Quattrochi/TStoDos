@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, DragEvent } from "react";
 import Button from "../common/Button/Button";
 import styles from "./TodoItem.module.css";
 
@@ -12,6 +12,7 @@ interface TodoItemProps {
   editTask?: (index: number) => void;
   saveTask?: (index: number, task: string) => void;
   deleteTask?: (index: number) => void;
+  reOrderTask: (index: number, direction: string) => void;
 }
 
 const TodoItem = ({
@@ -24,13 +25,35 @@ const TodoItem = ({
   editTask,
   saveTask,
   deleteTask,
+  reOrderTask,
 }: TodoItemProps) => {
   const [editedTask, setEditedTask] = useState<string>(task);
+  const [dragOver, setDragOver] = useState<boolean>(false);
 
   const isForDecomplete = !!deComplete;
 
+  const handleDragOverStart = () => setDragOver(true);
+  const handleDragOverEnd = () => setDragOver(false);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEditedTask(e.target.value);
+  };
+
+  const handleDragOver = (e: DragEvent<HTMLLIElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDragStart = (e: DragEvent<HTMLLIElement>) => {
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text", String(id));
+  };
+
+  const handleDrop = (e: DragEvent<HTMLLIElement>) => {
+    e.preventDefault();
+    const draggedItemId = Number(e.dataTransfer.getData("text"));
+
+    reOrderTask(draggedItemId, "increase");
+    setDragOver(false);
   };
 
   const handleUpdateTask = (): void => {
@@ -42,7 +65,17 @@ const TodoItem = ({
   };
 
   return (
-    <li className={styles.container}>
+    <li
+      className={`${styles.container} ${
+        dragOver ? styles.dragOver : ""
+      }`}
+      draggable={!isEditing}
+      onDrop={handleDrop}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnter={handleDragOverStart}
+      onDragLeave={handleDragOverEnd}
+    >
       {isEditing ? (
         <input
           className={styles.input}
@@ -69,7 +102,7 @@ const TodoItem = ({
       {isEditing ? (
         <Button
           variant="primary"
-          onClick={() => saveTask?.(id, task)}
+          onClick={() => saveTask?.(id, editedTask)}
         >
           Save
         </Button>
