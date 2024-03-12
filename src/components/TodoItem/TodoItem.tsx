@@ -41,6 +41,7 @@ const TodoItem = ({
 
   const handleDragOver = (e: DragEvent<HTMLLIElement>) => {
     e.preventDefault();
+    handleDragOverStart();
   };
 
   const handleDragStart = (e: DragEvent<HTMLLIElement>) => {
@@ -69,11 +70,10 @@ const TodoItem = ({
       className={`${styles.container} ${
         dragOver ? styles.dragOver : ""
       }`}
-      draggable={!isEditing}
+      draggable={!isEditing && !completed}
       onDrop={handleDrop}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
-      onDragEnter={handleDragOverStart}
       onDragLeave={handleDragOverEnd}
     >
       {isEditing ? (
@@ -85,7 +85,11 @@ const TodoItem = ({
         />
       ) : (
         <div className={styles.task}>
-          {completed ? <s>{task}</s> : <p>{task}</p>}
+          {completed ? (
+            <s>{task}</s>
+          ) : (
+            <p className={styles.draggable}>{task}</p>
+          )}
         </div>
       )}
 
@@ -116,7 +120,6 @@ const TodoItem = ({
         </Button>
       )}
 
-      {}
       <Button variant="warning" onClick={() => deleteTask?.(id)}>
         {"Delete"}
       </Button>
