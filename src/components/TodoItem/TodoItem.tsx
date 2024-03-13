@@ -12,7 +12,7 @@ interface TodoItemProps {
   editTask?: (index: number) => void;
   saveTask?: (index: number, task: string) => void;
   deleteTask?: (index: number) => void;
-  reOrderTask: (index: number, direction: string) => void;
+  reOrderTask?: (index: number, direction: string) => void;
 }
 
 const TodoItem = ({
@@ -32,16 +32,13 @@ const TodoItem = ({
 
   const isForDecomplete = !!deComplete;
 
-  const handleDragOverStart = () => setDragOver(true);
-  const handleDragOverEnd = () => setDragOver(false);
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEditedTask(e.target.value);
   };
 
   const handleDragOver = (e: DragEvent<HTMLLIElement>) => {
     e.preventDefault();
-    handleDragOverStart();
+    setDragOver(true);
   };
 
   const handleDragStart = (e: DragEvent<HTMLLIElement>) => {
@@ -53,7 +50,7 @@ const TodoItem = ({
     e.preventDefault();
     const draggedItemId = Number(e.dataTransfer.getData("text"));
 
-    reOrderTask(draggedItemId, "increase");
+    reOrderTask?.(draggedItemId, "increase");
     setDragOver(false);
   };
 
@@ -74,7 +71,7 @@ const TodoItem = ({
       onDrop={handleDrop}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
-      onDragLeave={handleDragOverEnd}
+      onDragLeave={() => setDragOver(false)}
     >
       {isEditing ? (
         <input
