@@ -1,13 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-import Header from "./components/Header/Header";
+import Layout from "./components/Layout/Layout";
 import TaskList from "./components/TodoItems/TaskList";
 
 function App() {
   return (
-    <div>
-      <Header />
+    <Layout>
       <TaskList />
-    </div>
+    </Layout>
   );
 }
 
